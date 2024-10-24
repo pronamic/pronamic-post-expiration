@@ -1,0 +1,7 @@
+parameters:
+	level: 6
+	scanDirectories:
+		- vendor/woocommerce/action-scheduler
+	paths:
+		- admin
+		- php

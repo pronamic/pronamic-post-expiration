@@ -10,6 +10,7 @@ namespace Pronamic\PostExpiration;
 use DateTimeImmutable;
 use DateTimezone;
 use WP_Error;
+use WP_Post;
 
 /**
  * Plugin class
@@ -25,7 +26,7 @@ final class Plugin {
 	/**
 	 * Controllers.
 	 * 
-	 * @var array
+	 * @var array<object>
 	 */
 	private $controllers = [];
 
@@ -107,10 +108,26 @@ final class Plugin {
 	 * @return void
 	 */
 	public function add_post_type_support_by_option() {
-		$post_types = \get_option( 'pronamic_post_expiration_post_types' );
-		$post_types = \wp_parse_list( $post_types );
+		$config = \get_option( 'pronamic_post_expiration_config' );
 
-		foreach ( $post_types as $post_type ) {
+		if ( ! isset( $config['post_types'] ) ) {
+			return;
+		}
+
+		if ( ! \is_array( $config['post_types'] ) ) {
+			return;
+		}
+
+		$post_types_config = $config['post_types'];
+
+		$post_types_config = \array_filter(
+			$post_types_config,
+			function ( $post_type_config ) {
+				return $post_type_config['support'] ?? false;
+			}
+		);
+
+		foreach ( $post_types_config as $post_type => $post_type_config ) {
 			if ( ! \post_type_supports( $post_type, 'pronamic_expiration' ) ) {
 				\add_post_type_support(
 					$post_type,
@@ -118,7 +135,7 @@ final class Plugin {
 					...[
 						'source'      => 'option',
 						'show_ui'     => true,
-						'post_status' => 'pronamic_expired',
+						'post_status' => $post_type_config['post_status'] ?? 'pronamic_expired',
 					]
 				);
 			}
@@ -214,6 +231,7 @@ final class Plugin {
 	 * @param int    $object_id   ID of the object metadata is for.
 	 * @param string $meta_key    Metadata key.
 	 * @param mixed  $meta_value  Metadata value.
+	 * @return void
 	 */
 	public function schedule_expiration_event( $meta_id, $object_id, $meta_key, $meta_value ) {
 		if ( '_pronamic_expiration_date' !== $meta_key ) {
@@ -230,6 +248,7 @@ final class Plugin {
 	 * @param int    $meta_id     ID of updated metadata entry.
 	 * @param int    $object_id   ID of the object metadata is for.
 	 * @param string $meta_key    Metadata key.
+	 * @return void
 	 */
 	public function unschedule_expiration_event( $meta_id, $object_id, $meta_key ) {
 		if ( '_pronamic_expiration_date' !== $meta_key ) {
@@ -358,7 +377,7 @@ final class Plugin {
 			return;
 		}
 
-		$post_expiration_info = PostExpirationInfo::get_from_post_type( $post_type );
+		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
 
 		if ( null === $post_expiration_info ) {
 			return;

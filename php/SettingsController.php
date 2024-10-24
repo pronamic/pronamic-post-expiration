@@ -16,6 +16,8 @@ namespace Pronamic\PostExpiration;
 final class SettingsController {
 	/**
 	 * Setup.
+	 * 
+	 * @return void
 	 */
 	public function setup() {
 		\add_action( 'init', [ $this, 'init' ] );
@@ -27,16 +29,48 @@ final class SettingsController {
 
 	/**
 	 * Initialize.
+	 * 
+	 * @return void
 	 */
 	public function init() {
 		\register_setting(
 			'pronamic_post_expiration',
-			'pronamic_post_expiration_post_types'
+			'pronamic_post_expiration_config',
+			/**
+			 * Schema.
+			 * 
+			 * @link https://developer.wordpress.org/reference/functions/register_setting/
+			 * @link https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/
+			 */
+			[
+				'type'       => 'object',
+				'properties' => [
+					'post_types' => [
+						'type'                 => 'object',
+						'properties'           => [],
+						'additionalProperties' => [
+							'type'       => 'object',
+							'properties' => [
+								'post_status' => [
+									'type'    => 'string',
+									'default' => 'pronamic_expired',
+								],
+								'support'     => [
+									'type'    => 'boolean',
+									'default' => false,
+								],
+							],
+						],
+					],
+				],
+			]
 		);
 	}
 
 	/**
 	 * Admin initialize.
+	 * 
+	 * @return void
 	 */
 	public function admin_init() {
 		\add_settings_section(
@@ -47,8 +81,8 @@ final class SettingsController {
 		);
 
 		\add_settings_field(
-			'pronamic_post_expiration_post_types',
-			\__( 'Post types', 'pronamic-moneybird' ),
+			'pronamic_post_expiration_config',
+			\__( 'Post types', 'pronamic-post-expiration' ),
 			function () {
 				include __DIR__ . '/../admin/settings-field-post-types-support.php';
 			},

@@ -27,8 +27,8 @@ final class YoastSeoSchemaController {
 	 *
 	 * @link https://developer.yoast.com/features/schema/pieces/webpage/
 	 * 
-	 * @param array $data Schema.org Webpage data array.
-	 * @return array Schema.org Webpage data array.
+	 * @param array<string, string> $data Schema.org Webpage data array.
+	 * @return array<string, string> Schema.org Webpage data array.
 	 */
 	public function maybe_add_expires( $data ) {
 		if ( ! \is_singular() ) {

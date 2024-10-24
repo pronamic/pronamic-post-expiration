@@ -58,6 +58,19 @@ $post_status_objects = \array_filter(
 		<?php foreach ( $post_type_objects as $post_type_info ) : ?>
 
 			<tr>
+				<?php
+
+				$post_expiration_info = PostExpirationInfo::get_from_post_type( $post_type_info->name );
+
+				$checked  = false;
+				$disabled = false;
+
+				if ( null !== $post_expiration_info ) {
+					$checked  = true;
+					$disabled = ( 'option' !== $post_expiration_info->source );
+				}
+
+				?>
 				<td>
 					<code><?php echo \esc_html( $post_type_info->name ); ?></code>
 				</td>
@@ -67,18 +80,13 @@ $post_status_objects = \array_filter(
 				<td>
 					<?php
 
-					$post_expiration_info = PostExpirationInfo::get_from_post_type( $post_type_info->name );
-
-					$checked  = false;
-					$disabled = false;
-
-					if ( null !== $post_expiration_info ) {
-						$checked  = true;
-						$disabled = ( 'option' !== $post_expiration_info->source );
-					}
+					$name = \sprintf(
+						'pronamic_post_expiration_config[post_types][%s][support]',
+						$post_type_info->name
+					);
 
 					?>
-					<input type="checkbox" name="pronamic_post_expiration_post_types[]" value="<?php echo \esc_attr( $post_type_info->name ); ?>" <?php \checked( $checked ); ?> <?php \disabled( $disabled ); ?> />
+					<input type="checkbox" name="<?php echo \esc_attr( $name ); ?>" value="1" <?php \checked( $checked ); ?> <?php \disabled( $disabled ); ?> />
 				</td>
 				<td>
 					<?php
@@ -103,15 +111,20 @@ $post_status_objects = \array_filter(
 						$options[ $current ] = $current;
 					}
 
+					$name = \sprintf(
+						'pronamic_post_expiration_config[post_types][%s][post_status]',
+						$post_type_info->name
+					);
+
 					?>
-					<select>
+					<select name="<?php echo \esc_attr( $name ); ?>" <?php \disabled( $disabled ); ?>>
 						<?php
 
 						foreach ( $options as $value => $label ) {
 							printf(
 								'<option value="%s" %s>%s</option>',
 								\esc_attr( $value ),
-								\checked( $value, '', false ),
+								\selected( $value, $current, false ),
 								\esc_html( $label )
 							);
 						}
