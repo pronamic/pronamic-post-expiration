@@ -195,7 +195,9 @@ final class Plugin {
 			$meta_value = \get_post_meta( $post_id, '_pronamic_expiration_date', true );
 		}
 
-		$expiration_date = $this->get_expiration_date_from_meta_value( $meta_value );
+		$post_expiration_manager = new PostExpirationManager();
+
+		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
 
 		if ( null === $expiration_date ) {
 			return;
@@ -219,30 +221,6 @@ final class Plugin {
 	}
 
 	/**
-	 * Get expiration date from meta value.
-	 * 
-	 * @param mixed $meta_value Meta value.
-	 * @return DateTimeImmutable|null
-	 */
-	private function get_expiration_date_from_meta_value( $meta_value ) {
-		if ( ! \is_string( $meta_value ) ) {
-			return null;
-		}
-
-		try {
-			$result = DateTimeImmutable::createFromFormat( 'Y-m-d H:i:s', $meta_value, new DateTimeZone( 'GMT' ) );
-
-			if ( false === $result ) {
-				return null;
-			}
-
-			return $result;
-		} catch ( \Exception $e ) {
-			return null;
-		}
-	}
-
-	/**
 	 * Meta box expiration.
 	 * 
 	 * @param WP_Post $post Post.
@@ -253,7 +231,9 @@ final class Plugin {
 
 		$meta_value = \get_post_meta( $post->ID, '_pronamic_expiration_date', true );
 
-		$expiration_date = $this->get_expiration_date_from_meta_value( $meta_value );
+		$post_expiration_manager = new PostExpirationManager();
+
+		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
 
 		if ( null !== $expiration_date ) {
 			$date_local = $expiration_date->setTimezone( \wp_timezone() );
@@ -296,7 +276,9 @@ final class Plugin {
 	public function expire_post( $post_id ) {
 		$meta_value = \get_post_meta( $post_id, '_pronamic_expiration_date', true );
 
-		$expiration_date = $this->get_expiration_date_from_meta_value( $meta_value );
+		$post_expiration_manager = new PostExpirationManager();
+
+		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
 
 		if ( null === $expiration_date ) {
 			return;
