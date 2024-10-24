@@ -47,6 +47,10 @@ final class YoastSeoSchemaController {
 			return $data;
 		}
 
+		if ( ! \post_type_supports( \get_post_type( $post_id ), 'expiration' ) ) {
+			return $data;
+		}
+
 		$data['expires'] = $expiration_date->format( \DATE_ATOM );
 
 		return $data;
