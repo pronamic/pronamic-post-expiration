@@ -28,6 +28,13 @@ $post_status_objects = \get_post_stati(
 	'objects'
 );
 
+$post_status_objects = \array_filter(
+	$post_status_objects,
+	function ( $post_status_object ) {
+		return ! \in_array( $post_status_object->name, [ 'future', 'pending' ], true );
+	}
+);
+
 ?>
 <style type="text/css">
 	.form-table .widefat th,
@@ -76,19 +83,24 @@ $post_status_objects = \get_post_stati(
 				<td>
 					<?php
 
-					if ( null !== $post_expiration_info ) {
-						\printf(
-							'<code>%s</code>',
-							\esc_html( $post_expiration_info->post_status )
-						);
-					}
+					$current = ( null === $post_expiration_info ) ? '' : $post_expiration_info->post_status;
 
 					$options = [
 						'' => '',
 					];
 
 					foreach ( $post_status_objects as $key => $post_status_info ) {
-						$options[ $key ] = $post_status_info->label;
+						$options[ $key ] = \sprintf(
+							/* translators: 1: Post status label, 2: Post status name, 3: Public yes/no. */
+							\__( '%1$s (%2$s) · Public: %3$s', 'pronamic-post-expiration' ),
+							\esc_html( $post_status_info->label ),
+							\esc_html( $post_status_info->name ),
+							\esc_html( $post_status_info->public ? \__( 'Yes', 'pronamic-post-expiration' ) : \__( 'No', 'pronamic-post-expiration' ) )
+						);
+					}
+
+					if ( ! \array_key_exists( $current, $options ) ) {
+						$options[ $current ] = $current;
 					}
 
 					?>
