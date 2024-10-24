@@ -65,7 +65,16 @@ class Plugin {
 	 * @return void
 	 */
 	public function init() {
-		
+		\register_post_status(
+			'expired',
+			[
+				'label'                     => \__( 'Expired', 'pronamic-post-expiration' ),
+				'exclude_from_search'       => false,
+				'public'                    => true,
+				'show_in_admin_all_list'    => true,
+				'show_in_admin_status_list' => true,
+			]
+		)
 	}
 }
 
