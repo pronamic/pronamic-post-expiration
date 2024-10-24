@@ -7,6 +7,9 @@
 
 namespace Pronamic\PostExpiration;
 
+use DateTimeImmutable;
+use DateTimezone;
+
 /**
  * Plugin class
  */
@@ -131,9 +134,21 @@ final class Plugin {
 			return;
 		}
 
-		$value = \sanitize_text_field( \wp_unslash( $_POST['pronamic_expiration_date'] ) );
+		$input = \sanitize_text_field( \wp_unslash( $_POST['pronamic_expiration_date'] ) );
 
-		\update_post_meta( $post_id, '_pronamic_expiration_date', $value );
+		try {
+			$result = DateTimeImmutable::createFromFormat( 'Y-m-d\TH:i', $input, \wp_timezone() );
+
+			if ( false == $result ) {
+				return;
+			}
+
+			$date_gmt = $result->setTimezone( new DateTimeZone( 'GMT' ) );
+
+			\update_post_meta( $post_id, '_pronamic_expiration_date', $date_gmt->format( 'Y-m-d H:i:s' ) );
+		} catch ( \Exception $e ) {
+			return;
+		}
 	}
 
 	/**
@@ -143,13 +158,27 @@ final class Plugin {
 	 * @return void
 	 */
 	public function meta_box_expiration( $post ) {
-		$expiration_date = \get_post_meta( $post->ID, '_pronamic_expiration_date', true );
+		$value = '';
+
+		$meta_value = \get_post_meta( $post->ID, '_pronamic_expiration_date', true );
+
+		try {
+			$result = DateTimeImmutable::createFromFormat( 'Y-m-d H:i:s', $meta_value, new DateTimeZone( 'GMT' ) );
+
+			if ( false !== $result ) {
+				$date_local = $result->setTimezone( \wp_timezone() );
+
+				$value = $date_local->format( 'Y-m-d\TH:i' );
+			}
+		} catch ( \Exception $e ) {
+			$value = '';
+		}
 
 		\wp_nonce_field( 'pronamic_save_expiration_date', 'pronamic_expiration_date_nonce' );
 
 		\printf(
 			'<input type="datetime-local" name="pronamic_expiration_date" value="%s" />',
-			\esc_attr( $expiration_date )
+			\esc_attr( $value )
 		);
 	}
 }
