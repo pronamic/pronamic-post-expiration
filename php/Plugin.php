@@ -47,6 +47,7 @@ final class Plugin {
 	 */
 	private function __construct() {
 		$this->controllers = [
+			new SettingsController(),
 			new YoastSeoSchemaController(),
 		];
 	}
@@ -58,6 +59,7 @@ final class Plugin {
 	 */
 	public function setup() {
 		\add_action( 'init', [ $this, 'init' ] );
+		\add_action( 'init', [ $this, 'add_post_type_support_by_option' ], 9000 );
 
 		\add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
 
@@ -91,8 +93,22 @@ final class Plugin {
 				'show_in_admin_status_list' => true,
 			]
 		);
+	}
 
-		\add_post_type_support( 'post', 'expiration' );
+	/**
+	 * Add post type support by option.
+	 * 
+	 * @return void
+	 */
+	public function add_post_type_support_by_option() {
+		$post_types = \get_option( 'pronamic_post_expiration_post_types' );
+		$post_types = \wp_parse_list( $post_types );
+
+		foreach ( $post_types as $post_type ) {
+			if ( ! \post_type_supports( $post_type, 'expiration' ) ) {
+				\add_post_type_support( $post_type, 'expiration', ...[ 'source' => 'option' ] );
+			}
+		}
 	}
 
 	/**
@@ -233,6 +249,10 @@ final class Plugin {
 			return;
 		}
 
+		if ( ! \post_type_supports( \get_post_type( $post_id ), 'expiration' ) ) {
+			return;
+		}
+
 		\as_unschedule_action(
 			'pronamic_expire_post',
 			[
@@ -315,6 +335,10 @@ final class Plugin {
 		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
 
 		if ( null === $expiration_date ) {
+			return;
+		}
+
+		if ( ! \post_type_supports( \get_post_type( $post_id ), 'expiration' ) ) {
 			return;
 		}
 
