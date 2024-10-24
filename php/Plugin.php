@@ -9,6 +9,7 @@ namespace Pronamic\PostExpiration;
 
 use DateTimeImmutable;
 use DateTimezone;
+use WP_Error;
 
 /**
  * Plugin class
@@ -62,6 +63,11 @@ final class Plugin {
 
 		\add_action( 'save_post', [ $this, 'save_post' ] );
 
+		\add_action( 'updated_post_meta', [ $this, 'schedule_expiration_event' ], 10, 4 );
+		\add_action( 'deleted_post_meta', [ $this, 'unschedule_expiration_event' ], 10, 4 );
+
+		\add_action( 'pronamic_expire_post', [ $this, 'expire_post' ] );
+
 		foreach ( $this->controllers as $controller ) {
 			$controller->setup();
 		}
@@ -77,6 +83,8 @@ final class Plugin {
 			'expired',
 			[
 				'label'                     => \__( 'Expired', 'pronamic-post-expiration' ),
+				/* translators: %s: count value */
+				'label_count'               => \_n_noop( 'Expired <span class="count">(%s)</span>', 'Expired <span class="count">(%s)</span>', 'pronamic-post-expiration' ),
 				'exclude_from_search'       => false,
 				'public'                    => true,
 				'show_in_admin_all_list'    => true,
@@ -149,6 +157,89 @@ final class Plugin {
 		} catch ( \Exception $e ) {
 			return;
 		}
+
+		/**
+		 * The `update_post_meta( … )` function call above should already trigger this,
+		 * but only if the meta value has actually changed. This is an additional call
+		 * to force the event to be scheduled for sure.
+		 */
+		$this->maybe_schedule_expiration_event( $post_id );
+	}
+
+	/**
+	 * Schedule expiration event.
+	 * 
+	 * @link https://github.com/WordPress/WordPress/blob/1809b184049d7eacf26bc3ef68e0979a60ed7489/wp-includes/meta.php#L316-L336
+	 * @param int    $meta_id     ID of updated metadata entry.
+	 * @param int    $object_id   ID of the object metadata is for.
+	 * @param string $meta_key    Metadata key.
+	 * @param mixed  $meta_value  Metadata value.
+	 */
+	public function schedule_expiration_event( $meta_id, $object_id, $meta_key, $meta_value ) {
+		if ( '_pronamic_expiration_date' !== $meta_key ) {
+			return;
+		}
+
+		$this->maybe_schedule_expiration_event( $object_id, $meta_value );
+	}
+
+	/**
+	 * Maybe schedule expiration event.
+	 * 
+	 * @param int         $post_id    Post ID.
+	 * @param string|null $meta_value Meta value.
+	 * @return void
+	 */
+	private function maybe_schedule_expiration_event( $post_id, $meta_value = null ) {
+		if ( null === $meta_value ) {
+			$meta_value = \get_post_meta( $post_id, '_pronamic_expiration_date', true );
+		}
+
+		$expiration_date = $this->get_expiration_date_from_meta_value( $meta_value );
+
+		if ( null === $expiration_date ) {
+			return;
+		}
+
+		if ( 'expired' === \get_post_status( $post_id ) ) {
+			return;
+		}
+
+		$action_id = \as_schedule_single_action(
+			$expiration_date->getTimestamp(),
+			'pronamic_expire_post',
+			[
+				'post_id' => $post_id,
+			],
+			'pronamic-post-expiration',
+			true
+		);
+
+		\update_post_meta( $post_id, '_pronamic_expire_action_id', $action_id );
+	}
+
+	/**
+	 * Get expiration date from meta value.
+	 * 
+	 * @param mixed $meta_value Meta value.
+	 * @return DateTimeImmutable|null
+	 */
+	private function get_expiration_date_from_meta_value( $meta_value ) {
+		if ( ! \is_string( $meta_value ) ) {
+			return null;
+		}
+
+		try {
+			$result = DateTimeImmutable::createFromFormat( 'Y-m-d H:i:s', $meta_value, new DateTimeZone( 'GMT' ) );
+
+			if ( false === $result ) {
+				return null;
+			}
+
+			return $result;
+		} catch ( \Exception $e ) {
+			return null;
+		}
 	}
 
 	/**
@@ -162,16 +253,12 @@ final class Plugin {
 
 		$meta_value = \get_post_meta( $post->ID, '_pronamic_expiration_date', true );
 
-		try {
-			$result = DateTimeImmutable::createFromFormat( 'Y-m-d H:i:s', $meta_value, new DateTimeZone( 'GMT' ) );
+		$expiration_date = $this->get_expiration_date_from_meta_value( $meta_value );
 
-			if ( false !== $result ) {
-				$date_local = $result->setTimezone( \wp_timezone() );
+		if ( null !== $expiration_date ) {
+			$date_local = $expiration_date->setTimezone( \wp_timezone() );
 
-				$value = $date_local->format( 'Y-m-d\TH:i' );
-			}
-		} catch ( \Exception $e ) {
-			$value = '';
+			$value = $date_local->format( 'Y-m-d\TH:i' );
 		}
 
 		\wp_nonce_field( 'pronamic_save_expiration_date', 'pronamic_expiration_date_nonce' );
@@ -180,5 +267,51 @@ final class Plugin {
 			'<input type="datetime-local" name="pronamic_expiration_date" value="%s" />',
 			\esc_attr( $value )
 		);
+
+		$action_id = \get_post_meta( $post->ID, '_pronamic_expire_action_id', true );
+
+		if ( \current_user_can( 'manage_options' ) && \is_numeric( $action_id ) ) {
+			$url = \add_query_arg(
+				[
+					'page' => 'action-scheduler',
+				],
+				\admin_url( 'tools.php' )
+			);
+
+			\printf(
+				'<br><br><a href="%s">%s</a>',
+				\esc_url( $url ),
+				\esc_html__( 'View scheduled expire event', 'pronamic-post-expiration' )
+			);
+		}
+	}
+
+	/**
+	 * Expire post.
+	 * 
+	 * @param int $post_id Post ID.
+	 * @return void
+	 * @throws \Exception Throws an exception if the post status could not be updated to expired.
+	 */
+	public function expire_post( $post_id ) {
+		$meta_value = \get_post_meta( $post_id, '_pronamic_expiration_date', true );
+
+		$expiration_date = $this->get_expiration_date_from_meta_value( $meta_value );
+
+		if ( null === $expiration_date ) {
+			return;
+		}
+
+		$result = \wp_update_post(
+			[
+				'ID'          => $post_id,
+				'post_status' => 'expired',
+			],
+			true
+		);
+
+		if ( $result instanceof WP_Error ) {
+			throw new \Exception( \esc_html( $result->get_error_message() ) );
+		}
 	}
 }
