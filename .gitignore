@@ -1,0 +1,15 @@
+# Build
+/build/
+
+# Node.js
+/node_modules/
+
+# Composer
+/vendor/
+
+# Archies
+/pronamic-post-expiration.zip
+/pronamic-post-expiration.*.zip
+
+# Ignore generated credentials from google-github-actions/auth
+gha-creds-*.json

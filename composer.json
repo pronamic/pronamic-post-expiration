@@ -1,0 +1,43 @@
+{
+	"name": "pronamic/pronamic-post-expiration",
+	"description": "Easily manage and automate post expiration in WordPress.",
+	"type": "wordpress-plugin",
+	"license": "proprietary",
+	"autoload": {
+		"psr-4": {
+			"Pronamic\\PostExpiration\\": "php/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Pronamic",
+			"email": "info@pronamic.nl"
+		}
+	],
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"wp-slug": "pronamic-post-expiration"
+	},
+	"require-dev": {
+		"pronamic/wp-coding-standards": "^2.2",
+		"pronamic/pronamic-cli": "^1.1"
+	},
+	"scripts": {
+		"build": [
+			"rm -rf ./build",
+			"mkdir ./build",
+			"mkdir ./build/stage-1",
+			"rsync --recursive --verbose --exclude-from=.distignore --exclude-from=.gitignore ./ ./build/stage-1/",
+			"composer install --no-dev --prefer-dist --optimize-autoloader --working-dir=./build/stage-1/",
+			"vendor/bin/wp i18n make-pot ./build/stage-1/ --slug=pronamic-post-expiration",
+			"vendor/bin/wp dist-archive ./build/stage-1/ --plugin-dirname=pronamic-post-expiration"
+		],
+		"dist-archive": "wp dist-archive . --plugin-dirname=pronamic-post-expiration",
+		"make-pot": [
+			"@build",
+			"rsync --recursive --delete --verbose ./build/languages/ ./languages/"
+		]
+	}
+}
