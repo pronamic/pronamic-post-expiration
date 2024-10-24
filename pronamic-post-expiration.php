@@ -24,58 +24,28 @@
  * @package   Pronamic\PostExpiration
  */
 
-namespace Pronamic\PostExpiration;
-
-/**
- * Plugin class
- */
-class Plugin {
-	/**
-	 * Instance.
-	 *
-	 * @var self
-	 */
-	protected static $instance = null;
-
-	/**
-	 * Return instance of this class.
-	 *
-	 * @return self A single instance of this class.
-	 */
-	public static function instance() {
-		if ( null === self::$instance ) {
-			self::$instance = new self();
-		}
-
-		return self::$instance;
-	}
-
-	/**
-	 * Setup.
-	 * 
-	 * @return void
-	 */
-	public function setup() {
-		\add_action( 'init', [ $this, 'init' ] );
-	}
-
-	/**
-	 * Initialize.
-	 * 
-	 * @return void
-	 */
-	public function init() {
-		\register_post_status(
-			'expired',
-			[
-				'label'                     => \__( 'Expired', 'pronamic-post-expiration' ),
-				'exclude_from_search'       => false,
-				'public'                    => true,
-				'show_in_admin_all_list'    => true,
-				'show_in_admin_status_list' => true,
-			]
-		)
-	}
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-Plugin::instance()->setup();
+/**
+ * Autoload.
+ */
+require_once __DIR__ . '/vendor/autoload.php';
+
+/**
+ * Action Scheduler.
+ */
+require_once __DIR__ . '/vendor/woocommerce/action-scheduler/action-scheduler.php';
+
+/**
+ * Plugin.
+ */
+add_action(
+	'plugins_loaded',
+	function () {
+		load_plugin_textdomain( 'pronamic-post-expiration', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	}
+);
+
+\Pronamic\PostExpiration\Plugin::instance()->setup();

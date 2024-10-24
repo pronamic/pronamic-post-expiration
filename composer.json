@@ -39,5 +39,8 @@
 			"@build",
 			"rsync --recursive --delete --verbose ./build/languages/ ./languages/"
 		]
+	},
+	"require": {
+		"woocommerce/action-scheduler": "^3.8"
 	}
 }
