@@ -1,0 +1,59 @@
+# Copyright (C) 2024 Pronamic
+# This file is distributed under the proprietary.
+msgid ""
+msgstr ""
+"Project-Id-Version: Pronamic Post Expiration 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-post-expiration\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-10-24T11:40:02+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: pronamic-post-expiration\n"
+
+#. Plugin Name of the plugin
+#: pronamic-post-expiration.php
+msgid "Pronamic Post Expiration"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: pronamic-post-expiration.php
+msgid "https://www.pronamic.eu/plugins/pronamic-post-expiration/"
+msgstr ""
+
+#. Description of the plugin
+#: pronamic-post-expiration.php
+msgid "Easily manage and automate post expiration in WordPress."
+msgstr ""
+
+#. Author of the plugin
+#: pronamic-post-expiration.php
+msgid "Pronamic"
+msgstr ""
+
+#. Author URI of the plugin
+#: pronamic-post-expiration.php
+msgid "https://www.pronamic.eu/"
+msgstr ""
+
+#: php/Plugin.php:85
+msgid "Expired"
+msgstr ""
+
+#. translators: %s: count value
+#: php/Plugin.php:87
+msgid "Expired <span class=\"count\">(%s)</span>"
+msgid_plural "Expired <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: php/Plugin.php:112
+msgid "Expiration"
+msgstr ""
+
+#: php/Plugin.php:264
+msgid "View scheduled expire action"
+msgstr ""

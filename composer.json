@@ -37,7 +37,7 @@
 		"dist-archive": "wp dist-archive . --plugin-dirname=pronamic-post-expiration",
 		"make-pot": [
 			"@build",
-			"rsync --recursive --delete --verbose ./build/languages/ ./languages/"
+			"rsync --recursive --delete --verbose ./build/stage-1/languages/ ./languages/"
 		]
 	},
 	"require": {

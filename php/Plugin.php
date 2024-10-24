@@ -64,7 +64,7 @@ final class Plugin {
 		\add_action( 'save_post', [ $this, 'save_post' ] );
 
 		\add_action( 'updated_post_meta', [ $this, 'schedule_expiration_event' ], 10, 4 );
-		\add_action( 'deleted_post_meta', [ $this, 'unschedule_expiration_event' ], 10, 4 );
+		\add_action( 'deleted_post_meta', [ $this, 'unschedule_expiration_event' ], 10, 3 );
 
 		\add_action( 'pronamic_expire_post', [ $this, 'expire_post' ] );
 
@@ -144,6 +144,10 @@ final class Plugin {
 
 		$input = \sanitize_text_field( \wp_unslash( $_POST['pronamic_expiration_date'] ) );
 
+		if ( '' === $input ) {
+			\delete_post_meta( $post_id, '_pronamic_expiration_date' );
+		}
+
 		try {
 			$result = DateTimeImmutable::createFromFormat( 'Y-m-d\TH:i', $input, \wp_timezone() );
 
@@ -184,6 +188,28 @@ final class Plugin {
 	}
 
 	/**
+	 * Unschedule expiration event.
+	 * 
+	 * @link https://github.com/WordPress/WordPress/blob/1809b184049d7eacf26bc3ef68e0979a60ed7489/wp-includes/meta.php#L508-L528
+	 * @param int    $meta_id     ID of updated metadata entry.
+	 * @param int    $object_id   ID of the object metadata is for.
+	 * @param string $meta_key    Metadata key.
+	 */
+	public function unschedule_expiration_event( $meta_id, $object_id, $meta_key ) {
+		if ( '_pronamic_expiration_date' !== $meta_key ) {
+			return;
+		}
+
+		\as_unschedule_action(
+			'pronamic_expire_post',
+			[
+				'post_id' => $object_id,
+			],
+			'pronamic-post-expiration'
+		);
+	}
+
+	/**
 	 * Maybe schedule expiration event.
 	 * 
 	 * @param int         $post_id    Post ID.
@@ -206,6 +232,14 @@ final class Plugin {
 		if ( 'expired' === \get_post_status( $post_id ) ) {
 			return;
 		}
+
+		\as_unschedule_action(
+			'pronamic_expire_post',
+			[
+				'post_id' => $post_id,
+			],
+			'pronamic-post-expiration'
+		);
 
 		$action_id = \as_schedule_single_action(
 			$expiration_date->getTimestamp(),
@@ -261,7 +295,7 @@ final class Plugin {
 			\printf(
 				'<br><br><a href="%s">%s</a>',
 				\esc_url( $url ),
-				\esc_html__( 'View scheduled expire event', 'pronamic-post-expiration' )
+				\esc_html__( 'View scheduled expire action', 'pronamic-post-expiration' )
 			);
 		}
 	}

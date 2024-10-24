@@ -1,0 +1,66 @@
+# Copyright (C) 2024 Pronamic
+# This file is distributed under the proprietary.
+msgid ""
+msgstr ""
+"Project-Id-Version: Pronamic Post Expiration 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-post-"
+"expiration\n"
+"POT-Creation-Date: 2024-10-24T11:40:02+00:00\n"
+"PO-Revision-Date: 2024-10-24 13:46+0200\n"
+"Last-Translator: Remco Tolsma <info@remcotolsma.nl>\n"
+"Language-Team: \n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.5\n"
+"X-Domain: pronamic-post-expiration\n"
+
+#. Plugin Name of the plugin
+#: pronamic-post-expiration.php
+msgid "Pronamic Post Expiration"
+msgstr "Pronamic Post Expiration"
+
+#. Plugin URI of the plugin
+#: pronamic-post-expiration.php
+msgid "https://www.pronamic.eu/plugins/pronamic-post-expiration/"
+msgstr "https://www.pronamic.eu/plugins/pronamic-post-expiration/"
+
+#. Description of the plugin
+#: pronamic-post-expiration.php
+msgid "Easily manage and automate post expiration in WordPress."
+msgstr ""
+"Beheer en automatiseer eenvoudig de vervaldatum van berichten in WordPress."
+
+#. Author of the plugin
+#: pronamic-post-expiration.php
+msgid "Pronamic"
+msgstr "Pronamic"
+
+#. Author URI of the plugin
+#: pronamic-post-expiration.php
+msgid "https://www.pronamic.eu/"
+msgstr "https://www.pronamic.nl/"
+
+#: php/Plugin.php:85
+msgid "Expired"
+msgstr "Verlopen"
+
+#. translators: %s: count value
+#: php/Plugin.php:87
+msgid "Expired <span class=\"count\">(%s)</span>"
+msgid_plural "Expired <span class=\"count\">(%s)</span>"
+msgstr[0] "Verlopen <span class=“count”>(%s)</span>"
+msgstr[1] "Verlopen <span class=“count”>(%s)</span>"
+
+#: php/Plugin.php:112
+msgid "Expiration"
+msgstr "Vervaldatum"
+
+#: php/Plugin.php:264
+msgid "View scheduled expire action"
+msgstr "Bekijk geplande vervaldatum actie"
+
+#~ msgid "View scheduled expire event"
+#~ msgstr "Bekijk geplande verloop gebeurtenis"
