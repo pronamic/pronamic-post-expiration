@@ -8,9 +8,22 @@
  * @package   Pronamic\WordPressCloudflare
  */
 
-$post_type_objects = get_post_types(
+namespace Pronamic\PostExpiration;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+$post_type_objects = \get_post_types(
 	[
 		'public' => true,
+	],
+	'objects'
+);
+
+$post_status_objects = \get_post_stati(
+	[
+		'internal' => false,
 	],
 	'objects'
 );
@@ -26,9 +39,10 @@ $post_type_objects = get_post_types(
 <table class="widefat">
 	<thead>
 		<tr>
-			<th><?php esc_html_e( 'Post type', 'pronamic-post-expiration' ); ?></th>
-			<th><?php esc_html_e( 'Label', 'pronamic-post-expiration' ); ?></th>
-			<th><?php esc_html_e( 'Support', 'pronamic-post-expiration' ); ?></th>
+			<th><?php \esc_html_e( 'Post type', 'pronamic-post-expiration' ); ?></th>
+			<th><?php \esc_html_e( 'Label', 'pronamic-post-expiration' ); ?></th>
+			<th><?php \esc_html_e( 'Support', 'pronamic-post-expiration' ); ?></th>
+			<th><?php \esc_html_e( 'Post status', 'pronamic-post-expiration' ); ?></th>
 		</tr>
 	</thead>
 
@@ -46,22 +60,52 @@ $post_type_objects = get_post_types(
 				<td>
 					<?php
 
-					$supports = \get_all_post_type_supports( $post_type_info->name );
+					$post_expiration_info = PostExpirationInfo::get_from_post_type( $post_type_info->name );
 
 					$checked  = false;
 					$disabled = false;
 
-					if ( post_type_supports( $post_type_info->name, 'expiration' ) ) {
+					if ( null !== $post_expiration_info ) {
 						$checked  = true;
-						$disabled = true;
-
-						if ( isset( $supports['expiration']['source'] ) ) {
-							$disabled = ( 'option' !== $supports['expiration']['source'] );
-						}
+						$disabled = ( 'option' !== $post_expiration_info->source );
 					}
 
 					?>
-					<input type="checkbox" name="pronamic_post_expiration_post_types[]" value="<?php echo \esc_attr( $post_type_info->name ); ?>" <?php checked( $checked ); ?> <?php disabled( $disabled ); ?> />
+					<input type="checkbox" name="pronamic_post_expiration_post_types[]" value="<?php echo \esc_attr( $post_type_info->name ); ?>" <?php \checked( $checked ); ?> <?php \disabled( $disabled ); ?> />
+				</td>
+				<td>
+					<?php
+
+					if ( null !== $post_expiration_info ) {
+						\printf(
+							'<code>%s</code>',
+							\esc_html( $post_expiration_info->post_status )
+						);
+					}
+
+					$options = [
+						'' => '',
+					];
+
+					foreach ( $post_status_objects as $key => $post_status_info ) {
+						$options[ $key ] = $post_status_info->label;
+					}
+
+					?>
+					<select>
+						<?php
+
+						foreach ( $options as $value => $label ) {
+							printf(
+								'<option value="%s" %s>%s</option>',
+								\esc_attr( $value ),
+								\checked( $value, '', false ),
+								\esc_html( $label )
+							);
+						}
+
+						?>
+					</select>
 				</td>
 			</tr>
 

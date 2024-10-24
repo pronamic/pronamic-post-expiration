@@ -58,7 +58,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public function setup() {
-		\add_action( 'init', [ $this, 'init' ] );
+		\add_action( 'init', [ $this, 'register_post_status' ], 9000 );
 		\add_action( 'init', [ $this, 'add_post_type_support_by_option' ], 9000 );
 
 		\add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
@@ -76,13 +76,19 @@ final class Plugin {
 	}
 
 	/**
-	 * Initialize.
+	 * Register post status.
 	 * 
 	 * @return void
 	 */
-	public function init() {
+	public function register_post_status() {
+		$post_status_info = \get_post_status_object( 'pronamic_expired' );
+
+		if ( null !== $post_status_info ) {
+			return;
+		}
+
 		\register_post_status(
-			'expired',
+			'pronamic_expired',
 			[
 				'label'                     => \__( 'Expired', 'pronamic-post-expiration' ),
 				/* translators: %s: count value */
@@ -105,8 +111,16 @@ final class Plugin {
 		$post_types = \wp_parse_list( $post_types );
 
 		foreach ( $post_types as $post_type ) {
-			if ( ! \post_type_supports( $post_type, 'expiration' ) ) {
-				\add_post_type_support( $post_type, 'expiration', ...[ 'source' => 'option' ] );
+			if ( ! \post_type_supports( $post_type, 'pronamic_expiration' ) ) {
+				\add_post_type_support(
+					$post_type,
+					'pronamic_expiration',
+					...[
+						'source'      => 'option',
+						'show_ui'     => true,
+						'post_status' => 'pronamic_expired',
+					]
+				);
 			}
 		}
 	}
@@ -119,7 +133,13 @@ final class Plugin {
 	 * @return void
 	 */
 	public function add_meta_boxes( $post_type ) {
-		if ( ! \post_type_supports( $post_type, 'expiration' ) ) {
+		$post_expiration_info = PostExpirationInfo::get_from_post_type( $post_type );
+
+		if ( null === $post_expiration_info ) {
+			return;
+		}
+
+		if ( ! $post_expiration_info->show_ui ) {
 			return;
 		}
 
@@ -338,14 +358,20 @@ final class Plugin {
 			return;
 		}
 
-		if ( ! \post_type_supports( \get_post_type( $post_id ), 'expiration' ) ) {
+		$post_expiration_info = PostExpirationInfo::get_from_post_type( $post_type );
+
+		if ( null === $post_expiration_info ) {
+			return;
+		}
+
+		if ( '' === $post_expiration_info->post_status ) {
 			return;
 		}
 
 		$result = \wp_update_post(
 			[
 				'ID'          => $post_id,
-				'post_status' => 'expired',
+				'post_status' => $post_expiration_info->post_status,
 			],
 			true
 		);

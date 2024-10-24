@@ -47,7 +47,9 @@ final class YoastSeoSchemaController {
 			return $data;
 		}
 
-		if ( ! \post_type_supports( \get_post_type( $post_id ), 'expiration' ) ) {
+		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
+
+		if ( null === $post_expiration_info ) {
 			return $data;
 		}
 
