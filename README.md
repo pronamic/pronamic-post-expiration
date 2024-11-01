@@ -19,9 +19,51 @@ Easily manage and automate post expiration in WordPress.
 | `request-failed`    | Failed     | [`wp-includes/post.php#L777-L790`](https://github.com/WordPress/wordpress-develop/blob/6.6.2/src/wp-includes/post.php#L777-L790) |
 | `request-completed` | Completed  | [`wp-includes/post.php#L792-L805`](https://github.com/WordPress/wordpress-develop/blob/6.6.2/src/wp-includes/post.php#L792-L805) |
 
-## Post status `expired`
+## Post status `pronamic_expired`
 
-This plugin registers the post status `expired`.
+This plugin registers the post status `pronamic_expired`.
+
+## Post type support
+
+```php
+\register_post_type(
+	'…',
+	[
+		// …
+		'supports'           => [
+			'title',
+			'editor',
+			'thumbnail',
+			// …
+			'pronamic_expiration',
+		],
+		// …
+	]
+);
+```
+
+### Advanced support options
+
+```php
+\register_post_type(
+	'…',
+	[
+		// …
+		'supports'           => [
+			'title',
+			'editor',
+			'thumbnail',
+			// …
+			'pronamic_expiration' => [
+				'post_status' => 'pronamic_expired',
+				'show_ui'     => true,
+				'source'      => 'pronamic-gambling-bonus-offers',
+			],
+		],
+		// …
+	]
+);
+```
 
 ## Links
 
