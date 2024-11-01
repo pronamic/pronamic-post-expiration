@@ -12,3 +12,5 @@
 .wp-env.json
 
 phpcs.xml.dist
+
+phpstan.neon.dist
