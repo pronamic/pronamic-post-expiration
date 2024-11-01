@@ -27,7 +27,7 @@ This plugin registers the post status `pronamic_expired`.
 
 ```php
 \register_post_type(
-	'…',
+	'your_post_type',
 	[
 		// …
 		'supports'           => [
