@@ -64,16 +64,16 @@ final class PostExpirationInfo {
 
 		$info = new self();
 
-		if ( isset( $supports['pronamic_expiration']['source'] ) ) {
-			$info->source = $supports['pronamic_expiration']['source'];
+		if ( isset( $supports['pronamic_expiration'][0]['source'] ) ) {
+			$info->source = $supports['pronamic_expiration'][0]['source'];
 		}
 
-		if ( isset( $supports['pronamic_expiration']['post_status'] ) ) {
-			$info->post_status = $supports['pronamic_expiration']['post_status'];
+		if ( isset( $supports['pronamic_expiration'][0]['post_status'] ) ) {
+			$info->post_status = $supports['pronamic_expiration'][0]['post_status'];
 		}
 
-		if ( isset( $supports['pronamic_expiration']['show_ui'] ) ) {
-			$info->show_ui = $supports['pronamic_expiration']['show_ui'];
+		if ( isset( $supports['pronamic_expiration'][0]['show_ui'] ) ) {
+			$info->show_ui = $supports['pronamic_expiration'][0]['show_ui'];
 		}
 
 		return $info;

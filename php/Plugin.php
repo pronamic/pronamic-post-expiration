@@ -132,7 +132,7 @@ final class Plugin {
 				\add_post_type_support(
 					$post_type,
 					'pronamic_expiration',
-					...[
+					[
 						'source'      => 'option',
 						'show_ui'     => true,
 						'post_status' => $post_type_config['post_status'] ?? 'pronamic_expired',
