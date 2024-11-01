@@ -8,7 +8,7 @@
  * @package   Pronamic\WordPressCloudflare
  */
 
-namespace Pronamic\PostExpiration;
+namespace Pronamic\WordPressPostExpiration;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

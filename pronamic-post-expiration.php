@@ -21,7 +21,7 @@
  * @author    Pronamic <info@pronamic.eu>
  * @copyright 2005-2024 Pronamic
  * @license   GPL-3.0-or-later
- * @package   Pronamic\PostExpiration
+ * @package   Pronamic\WordPressPostExpiration
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,4 +48,4 @@ add_action(
 	}
 );
 
-\Pronamic\PostExpiration\Plugin::instance()->setup();
+\Pronamic\WordPressPostExpiration\Plugin::instance()->setup();

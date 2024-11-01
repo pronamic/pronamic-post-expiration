@@ -2,10 +2,10 @@
 /**
  * Post expiration info
  *
- * @package Pronamic\PostExpiration
+ * @package Pronamic\WordPressPostExpiration
  */
 
-namespace Pronamic\PostExpiration;
+namespace Pronamic\WordPressPostExpiration;
 
 /**
  * Post expiration info class

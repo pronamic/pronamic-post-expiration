@@ -1,11 +1,11 @@
 {
-	"name": "pronamic/pronamic-post-expiration",
+	"name": "pronamic/wp-pronamic-post-expiration",
 	"description": "Easily manage and automate post expiration in WordPress.",
 	"type": "wordpress-plugin",
 	"license": "proprietary",
 	"autoload": {
 		"psr-4": {
-			"Pronamic\\PostExpiration\\": "php/"
+			"Pronamic\\WordPressPostExpiration\\": "php/"
 		}
 	},
 	"authors": [

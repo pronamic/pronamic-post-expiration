@@ -2,10 +2,10 @@
 /**
  * Yoast SEO schema controller
  *
- * @package Pronamic\PostExpiration
+ * @package Pronamic\WordPressPostExpiration
  */
 
-namespace Pronamic\PostExpiration;
+namespace Pronamic\WordPressPostExpiration;
 
 /**
  * Yoast SEO schema controller class

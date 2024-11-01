@@ -2,10 +2,10 @@
 /**
  * Plugin
  *
- * @package Pronamic\PostExpiration
+ * @package Pronamic\WordPressPostExpiration
  */
 
-namespace Pronamic\PostExpiration;
+namespace Pronamic\WordPressPostExpiration;
 
 use DateTimeImmutable;
 use DateTimezone;
