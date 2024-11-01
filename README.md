@@ -46,7 +46,7 @@ This plugin registers the post status `pronamic_expired`.
 
 ```php
 \register_post_type(
-	'…',
+	'your_post_type',
 	[
 		// …
 		'supports'           => [
@@ -57,7 +57,7 @@ This plugin registers the post status `pronamic_expired`.
 			'pronamic_expiration' => [
 				'post_status' => 'pronamic_expired',
 				'show_ui'     => true,
-				'source'      => 'pronamic-gambling-bonus-offers',
+				'source'      => 'your-plugin-slug',
 			],
 		],
 		// …
