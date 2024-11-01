@@ -284,11 +284,13 @@ final class Plugin {
 			return;
 		}
 
-		if ( 'expired' === \get_post_status( $post_id ) ) {
+		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
+
+		if ( null === $post_expiration_info ) {
 			return;
 		}
 
-		if ( ! \post_type_supports( \get_post_type( $post_id ), 'expiration' ) ) {
+		if ( $post_expiration_info->post_status === \get_post_status( $post_id ) ) {
 			return;
 		}
 
