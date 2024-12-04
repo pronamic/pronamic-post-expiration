@@ -9,15 +9,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-24T18:42:22+00:00\n"
+"POT-Creation-Date: 2024-12-04T14:36:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: pronamic-post-expiration\n"
 
 #. Plugin Name of the plugin
 #: pronamic-post-expiration.php
-#: php/SettingsController.php:95
-#: php/SettingsController.php:96
+#: php/SettingsController.php:102
+#: php/SettingsController.php:103
 msgid "Pronamic Post Expiration"
 msgstr ""
 
@@ -41,58 +41,55 @@ msgstr ""
 msgid "https://www.pronamic.eu/"
 msgstr ""
 
-#: admin/settings-field-post-types-support.php:51
+#: admin/settings-field-post-types-support.php:49
 msgid "Post type"
 msgstr ""
 
-#: admin/settings-field-post-types-support.php:52
+#: admin/settings-field-post-types-support.php:50
 msgid "Label"
 msgstr ""
 
-#: admin/settings-field-post-types-support.php:53
+#: admin/settings-field-post-types-support.php:51
 msgid "Support"
 msgstr ""
 
-#: admin/settings-field-post-types-support.php:54
+#: admin/settings-field-post-types-support.php:52
 msgid "Post status"
 msgstr ""
 
+#. translators: 1: Post status label, 2: Post status name
+#: admin/settings-field-post-types-support.php:103
+msgid "%1$s (`%2$s`)"
+msgstr ""
+
 #. translators: 1: Post status label, 2: Post status name, 3: Public yes/no.
-#: admin/settings-field-post-types-support.php:105
-msgid "%1$s (%2$s) · Public: %3$s"
+#: admin/settings-field-post-types-support.php:111
+msgid "%1$s (`%2$s`, public)"
 msgstr ""
 
-#: admin/settings-field-post-types-support.php:108
-msgid "Yes"
-msgstr ""
-
-#: admin/settings-field-post-types-support.php:108
-msgid "No"
-msgstr ""
-
-#: php/Plugin.php:95
+#: php/Plugin.php:94
 msgid "Expired"
 msgstr ""
 
 #. translators: %s: count value
-#: php/Plugin.php:97
+#: php/Plugin.php:96
 msgid "Expired <span class=\"count\">(%s)</span>"
 msgid_plural "Expired <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: php/Plugin.php:166
+#: php/Plugin.php:165
 msgid "Expiration"
 msgstr ""
 
-#: php/Plugin.php:356
+#: php/Plugin.php:359
 msgid "View scheduled expire action"
 msgstr ""
 
-#: php/SettingsController.php:71
+#: php/SettingsController.php:78
 msgid "General"
 msgstr ""
 
-#: php/SettingsController.php:78
+#: php/SettingsController.php:85
 msgid "Post types"
 msgstr ""

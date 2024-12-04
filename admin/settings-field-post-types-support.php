@@ -99,12 +99,20 @@ $post_status_objects = \array_filter(
 
 					foreach ( $post_status_objects as $key => $post_status_info ) {
 						$options[ $key ] = \sprintf(
-							/* translators: 1: Post status label, 2: Post status name, 3: Public yes/no. */
-							\__( '%1$s (%2$s) · Public: %3$s', 'pronamic-post-expiration' ),
+							/* translators: 1: Post status label, 2: Post status name */
+							\__( '%1$s (`%2$s`)', 'pronamic-post-expiration' ),
 							\esc_html( $post_status_info->label ),
-							\esc_html( $post_status_info->name ),
-							\esc_html( $post_status_info->public ? \__( 'Yes', 'pronamic-post-expiration' ) : \__( 'No', 'pronamic-post-expiration' ) )
+							\esc_html( $post_status_info->name )
 						);
+
+						if ( $post_status_info->public ) {
+							$options[ $key ] = \sprintf(
+								/* translators: 1: Post status label, 2: Post status name, 3: Public yes/no. */
+								\__( '%1$s (`%2$s`, public)', 'pronamic-post-expiration' ),
+								\esc_html( $post_status_info->label ),
+								\esc_html( $post_status_info->name )
+							);
+						}
 					}
 
 					if ( ! \array_key_exists( $current, $options ) ) {
