@@ -31,6 +31,9 @@
 		"phpstan/extension-installer": "^1.4"
 	},
 	"scripts": {
+		"phpcbf": "XDEBUG_MODE=off vendor/bin/phpcbf",
+		"phpcs": "XDEBUG_MODE=off vendor/bin/phpcs -s -v",
+		"phplint": "find . -path ./vendor -prune -o -name '*.php' -print | xargs -n 1 -P 4 php -l",
 		"build": [
 			"rm -rf ./build",
 			"mkdir ./build",

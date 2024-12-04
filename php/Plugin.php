@@ -25,7 +25,7 @@ final class Plugin {
 
 	/**
 	 * Controllers.
-	 * 
+	 *
 	 * @var array<object>
 	 */
 	private $controllers = [];
@@ -55,7 +55,7 @@ final class Plugin {
 
 	/**
 	 * Setup.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function setup() {
@@ -78,7 +78,7 @@ final class Plugin {
 
 	/**
 	 * Register post status.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function register_post_status() {
@@ -104,7 +104,7 @@ final class Plugin {
 
 	/**
 	 * Add post type support by option.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function add_post_type_support_by_option() {
@@ -144,7 +144,7 @@ final class Plugin {
 
 	/**
 	 * Add meta boxes.
-	 * 
+	 *
 	 * @link https://developer.wordpress.org/reference/hooks/add_meta_boxes/
 	 * @param string $post_type Post type.
 	 * @return void
@@ -172,7 +172,7 @@ final class Plugin {
 
 	/**
 	 * Save post.
-	 * 
+	 *
 	 * @param int $post_id Post ID.
 	 * @return void
 	 */
@@ -225,7 +225,7 @@ final class Plugin {
 
 	/**
 	 * Schedule expiration event.
-	 * 
+	 *
 	 * @link https://github.com/WordPress/WordPress/blob/1809b184049d7eacf26bc3ef68e0979a60ed7489/wp-includes/meta.php#L316-L336
 	 * @param int    $meta_id     ID of updated metadata entry.
 	 * @param int    $object_id   ID of the object metadata is for.
@@ -243,7 +243,7 @@ final class Plugin {
 
 	/**
 	 * Unschedule expiration event.
-	 * 
+	 *
 	 * @link https://github.com/WordPress/WordPress/blob/1809b184049d7eacf26bc3ef68e0979a60ed7489/wp-includes/meta.php#L508-L528
 	 * @param int    $meta_id     ID of updated metadata entry.
 	 * @param int    $object_id   ID of the object metadata is for.
@@ -266,7 +266,7 @@ final class Plugin {
 
 	/**
 	 * Maybe schedule expiration event.
-	 * 
+	 *
 	 * @param int         $post_id    Post ID.
 	 * @param string|null $meta_value Meta value.
 	 * @return void
@@ -290,7 +290,7 @@ final class Plugin {
 			return;
 		}
 
-		if ( $post_expiration_info->post_status === \get_post_status( $post_id ) ) {
+		if ( \get_post_status( $post_id ) === $post_expiration_info->post_status ) {
 			return;
 		}
 
@@ -317,7 +317,7 @@ final class Plugin {
 
 	/**
 	 * Meta box expiration.
-	 * 
+	 *
 	 * @param WP_Post $post Post.
 	 * @return void
 	 */
@@ -363,7 +363,7 @@ final class Plugin {
 
 	/**
 	 * Expire post.
-	 * 
+	 *
 	 * @param int $post_id Post ID.
 	 * @return void
 	 * @throws \Exception Throws an exception if the post status could not be updated to expired.
