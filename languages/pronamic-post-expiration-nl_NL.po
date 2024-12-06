@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Pronamic Post Expiration 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-post-"
 "expiration\n"
-"POT-Creation-Date: 2024-10-24T18:42:22+00:00\n"
-"PO-Revision-Date: 2024-10-24 20:42+0200\n"
+"POT-Creation-Date: 2024-12-06T08:50:52+00:00\n"
+"PO-Revision-Date: 2024-12-06 09:53+0100\n"
 "Last-Translator: Remco Tolsma <info@remcotolsma.nl>\n"
 "Language-Team: \n"
 "Language: nl_NL\n"
@@ -18,8 +18,8 @@ msgstr ""
 "X-Domain: pronamic-post-expiration\n"
 
 #. Plugin Name of the plugin
-#: pronamic-post-expiration.php php/SettingsController.php:95
-#: php/SettingsController.php:96
+#: pronamic-post-expiration.php php/SettingsController.php:102
+#: php/SettingsController.php:103
 msgid "Pronamic Post Expiration"
 msgstr "Pronamic Post Expiration"
 
@@ -44,61 +44,59 @@ msgstr "Pronamic"
 msgid "https://www.pronamic.eu/"
 msgstr "https://www.pronamic.nl/"
 
-#: admin/settings-field-post-types-support.php:51
+#: admin/settings-field-post-types-support.php:49
 msgid "Post type"
 msgstr "Berichttype"
 
-#: admin/settings-field-post-types-support.php:52
+#: admin/settings-field-post-types-support.php:50
 msgid "Label"
 msgstr "Label"
 
-#: admin/settings-field-post-types-support.php:53
+#: admin/settings-field-post-types-support.php:51
 msgid "Support"
 msgstr "Support"
 
-#: admin/settings-field-post-types-support.php:54
+#: admin/settings-field-post-types-support.php:52
 msgid "Post status"
 msgstr "Berichtstatus"
 
-#. translators: 1: Post status label, 2: Post status name, 3: Public yes/no.
-#: admin/settings-field-post-types-support.php:105
-msgid "%1$s (%2$s) · Public: %3$s"
-msgstr "%1$s (%2$s) · Openbaar: %3$s"
+#: admin/settings-field-post-types-support.php:98
+msgid "Public"
+msgstr "Openbaar"
 
-#: admin/settings-field-post-types-support.php:108
-msgid "Yes"
-msgstr "Ja"
+#: admin/settings-field-post-types-support.php:102
+msgid "Non Public"
+msgstr "Niet openbaar"
 
-#: admin/settings-field-post-types-support.php:108
-msgid "No"
-msgstr "Nee"
+#. translators: 1: Post status label, 2: Post status name
+#: admin/settings-field-post-types-support.php:112
+#| msgid "%1$s (`%2$s`)"
+msgid "%1$s (%2$s)"
+msgstr "%1$s (%2$s)"
 
-#: php/Plugin.php:95
+#: php/Plugin.php:94
 msgid "Expired"
 msgstr "Verlopen"
 
 #. translators: %s: count value
-#: php/Plugin.php:97
+#: php/Plugin.php:96
 msgid "Expired <span class=\"count\">(%s)</span>"
 msgid_plural "Expired <span class=\"count\">(%s)</span>"
 msgstr[0] "Verlopen <span class=“count”>(%s)</span>"
 msgstr[1] "Verlopen <span class=“count”>(%s)</span>"
 
-#: php/Plugin.php:166
+#: php/Plugin.php:165
 msgid "Expiration"
 msgstr "Vervaldatum"
 
-#: php/Plugin.php:356
+#: php/Plugin.php:359
 msgid "View scheduled expire action"
 msgstr "Bekijk geplande vervaldatum actie"
 
-#: php/SettingsController.php:71
+#: php/SettingsController.php:78
 msgid "General"
 msgstr "Algemeen"
 
-#: php/SettingsController.php:78
+#: php/SettingsController.php:85
 msgid "Post types"
 msgstr "Berichttypen"
-
-#~ msgid "View scheduled expire event"
-#~ msgstr "Bekijk geplande verloop gebeurtenis"
