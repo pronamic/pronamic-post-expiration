@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-12-04T14:36:05+00:00\n"
+"POT-Creation-Date: 2024-12-06T08:50:52+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: pronamic-post-expiration\n"
@@ -57,14 +57,17 @@ msgstr ""
 msgid "Post status"
 msgstr ""
 
-#. translators: 1: Post status label, 2: Post status name
-#: admin/settings-field-post-types-support.php:103
-msgid "%1$s (`%2$s`)"
+#: admin/settings-field-post-types-support.php:98
+msgid "Public"
 msgstr ""
 
-#. translators: 1: Post status label, 2: Post status name, 3: Public yes/no.
-#: admin/settings-field-post-types-support.php:111
-msgid "%1$s (`%2$s`, public)"
+#: admin/settings-field-post-types-support.php:102
+msgid "Non Public"
+msgstr ""
+
+#. translators: 1: Post status label, 2: Post status name
+#: admin/settings-field-post-types-support.php:112
+msgid "%1$s (%2$s)"
 msgstr ""
 
 #: php/Plugin.php:94

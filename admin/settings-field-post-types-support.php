@@ -93,30 +93,26 @@ $post_status_objects = \array_filter(
 
 					$current = ( null === $post_expiration_info ) ? '' : $post_expiration_info->post_status;
 
-					$options = [
-						'' => '',
+					$groups = [
+						'public'     => [
+							'label'   => __( 'Public', 'pronamic-post-expiration' ),
+							'options' => [],
+						],
+						'non-public' => [
+							'label'   => __( 'Non Public', 'pronamic-post-expiration' ),
+							'options' => [],
+						],
 					];
 
 					foreach ( $post_status_objects as $key => $post_status_info ) {
-						$options[ $key ] = \sprintf(
+						$group = $post_status_info->public ? 'public' : 'non-public';
+
+						$groups[ $group ]['options'][ $key ] = \sprintf(
 							/* translators: 1: Post status label, 2: Post status name */
-							\__( '%1$s (`%2$s`)', 'pronamic-post-expiration' ),
+							\__( '%1$s (%2$s)', 'pronamic-post-expiration' ),
 							\esc_html( $post_status_info->label ),
 							\esc_html( $post_status_info->name )
 						);
-
-						if ( $post_status_info->public ) {
-							$options[ $key ] = \sprintf(
-								/* translators: 1: Post status label, 2: Post status name, 3: Public yes/no. */
-								\__( '%1$s (`%2$s`, public)', 'pronamic-post-expiration' ),
-								\esc_html( $post_status_info->label ),
-								\esc_html( $post_status_info->name )
-							);
-						}
-					}
-
-					if ( ! \array_key_exists( $current, $options ) ) {
-						$options[ $current ] = $current;
 					}
 
 					$name = \sprintf(
@@ -126,15 +122,35 @@ $post_status_objects = \array_filter(
 
 					?>
 					<select name="<?php echo \esc_attr( $name ); ?>" <?php \disabled( $disabled ); ?>>
+						<option value=""></option>
+
 						<?php
 
-						foreach ( $options as $value => $label ) {
-							printf(
-								'<option value="%s" %s>%s</option>',
-								\esc_attr( $value ),
-								\selected( $value, $current, false ),
-								\esc_html( $label )
-							);
+						foreach ( $groups as $group ) {
+							if ( 0 === count( $group['options'] ) ) {
+								continue;
+							}
+
+							?>
+
+							<optgroup label="<?php echo \esc_attr( $group['label'] ); ?>">
+
+								<?php
+
+								foreach ( $group['options'] as $value => $label ) {
+									printf(
+										'<option value="%s" %s>%s</option>',
+										\esc_attr( $value ),
+										\selected( $value, $current, false ),
+										\esc_html( $label )
+									);
+								}
+
+								?>
+
+							</optgroup>
+
+							<?php
 						}
 
 						?>
