@@ -120,6 +120,14 @@ $post_status_objects = \array_filter(
 						$post_type_info->name
 					);
 
+					// Filter groups without options.
+					$groups = array_filter(
+						$groups,
+						function ( $group ) {
+							return 0 !== count( $group['options'] );
+						}
+					);
+
 					?>
 					<select name="<?php echo \esc_attr( $name ); ?>" <?php \disabled( $disabled ); ?>>
 						<option value=""></option>
@@ -127,10 +135,6 @@ $post_status_objects = \array_filter(
 						<?php
 
 						foreach ( $groups as $group ) {
-							if ( 0 === count( $group['options'] ) ) {
-								continue;
-							}
-
 							?>
 
 							<optgroup label="<?php echo \esc_attr( $group['label'] ); ?>">
