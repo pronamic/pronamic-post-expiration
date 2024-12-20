@@ -37,23 +37,17 @@ final class YoastSeoSchemaController {
 
 		$post_id = \get_the_ID();
 
-		$meta_value = \get_post_meta( $post_id, '_pronamic_expiration_date', true );
-
-		$post_expiration_manager = new PostExpirationManager();
-
-		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
-
-		if ( null === $expiration_date ) {
-			return $data;
-		}
-
 		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
 
 		if ( null === $post_expiration_info ) {
 			return $data;
 		}
 
-		$data['expires'] = $expiration_date->format( \DATE_ATOM );
+		if ( null === $post_expiration_info->expiration_date ) {
+			return $data;
+		}
+
+		$data['expires'] = $post_expiration_info->expiration_date->format( \DATE_ATOM );
 
 		return $data;
 	}

@@ -66,7 +66,7 @@ final class Plugin {
 
 		\add_action( 'save_post', [ $this, 'save_post' ] );
 
-		\add_action( 'updated_post_meta', [ $this, 'schedule_expiration_event' ], 10, 4 );
+		\add_action( 'updated_post_meta', [ $this, 'schedule_expiration_event' ], 10, 3 );
 		\add_action( 'deleted_post_meta', [ $this, 'unschedule_expiration_event' ], 10, 3 );
 
 		\add_action( 'pronamic_expire_post', [ $this, 'expire_post' ] );
@@ -227,18 +227,23 @@ final class Plugin {
 	 * Schedule expiration event.
 	 *
 	 * @link https://github.com/WordPress/WordPress/blob/1809b184049d7eacf26bc3ef68e0979a60ed7489/wp-includes/meta.php#L316-L336
-	 * @param int    $meta_id     ID of updated metadata entry.
-	 * @param int    $object_id   ID of the object metadata is for.
-	 * @param string $meta_key    Metadata key.
-	 * @param mixed  $meta_value  Metadata value.
+	 * @param int    $meta_id   ID of updated metadata entry.
+	 * @param int    $object_id ID of the object metadata is for.
+	 * @param string $meta_key  Metadata key.
 	 * @return void
 	 */
-	public function schedule_expiration_event( $meta_id, $object_id, $meta_key, $meta_value ) {
-		if ( '_pronamic_expiration_date' !== $meta_key ) {
+	public function schedule_expiration_event( $meta_id, $object_id, $meta_key ) {
+		$post_expiration_info = PostExpirationInfo::get_from_post( $object_id );
+
+		if ( null === $post_expiration_info ) {
 			return;
 		}
 
-		$this->maybe_schedule_expiration_event( $object_id, $meta_value );
+		if ( $post_expiration_info->meta_key !== $meta_key ) {
+			return;
+		}
+
+		$this->maybe_schedule_expiration_event( $object_id );
 	}
 
 	/**
@@ -251,7 +256,13 @@ final class Plugin {
 	 * @return void
 	 */
 	public function unschedule_expiration_event( $meta_id, $object_id, $meta_key ) {
-		if ( '_pronamic_expiration_date' !== $meta_key ) {
+		$post_expiration_info = PostExpirationInfo::get_from_post( $object_id );
+
+		if ( null === $post_expiration_info ) {
+			return;
+		}
+
+		if ( $post_expiration_info->meta_key !== $meta_key ) {
 			return;
 		}
 
@@ -267,26 +278,17 @@ final class Plugin {
 	/**
 	 * Maybe schedule expiration event.
 	 *
-	 * @param int         $post_id    Post ID.
-	 * @param string|null $meta_value Meta value.
+	 * @param int $post_id Post ID.
 	 * @return void
 	 */
-	private function maybe_schedule_expiration_event( $post_id, $meta_value = null ) {
-		if ( null === $meta_value ) {
-			$meta_value = \get_post_meta( $post_id, '_pronamic_expiration_date', true );
-		}
-
-		$post_expiration_manager = new PostExpirationManager();
-
-		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
-
-		if ( null === $expiration_date ) {
-			return;
-		}
-
+	private function maybe_schedule_expiration_event( $post_id ) {
 		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
 
 		if ( null === $post_expiration_info ) {
+			return;
+		}
+
+		if ( null === $post_expiration_info->expiration_date ) {
 			return;
 		}
 
@@ -324,14 +326,10 @@ final class Plugin {
 	public function meta_box_expiration( $post ) {
 		$value = '';
 
-		$meta_value = \get_post_meta( $post->ID, '_pronamic_expiration_date', true );
+		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
 
-		$post_expiration_manager = new PostExpirationManager();
-
-		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
-
-		if ( null !== $expiration_date ) {
-			$date_local = $expiration_date->setTimezone( \wp_timezone() );
+		if ( null !== $post_expiration_info && null !== $post_expiration_info->expiration_date ) {
+			$date_local = $post_expiration_info->expiration_date->setTimezone( \wp_timezone() );
 
 			$value = $date_local->format( 'Y-m-d\TH:i' );
 		}
@@ -369,19 +367,13 @@ final class Plugin {
 	 * @throws \Exception Throws an exception if the post status could not be updated to expired.
 	 */
 	public function expire_post( $post_id ) {
-		$meta_value = \get_post_meta( $post_id, '_pronamic_expiration_date', true );
-
-		$post_expiration_manager = new PostExpirationManager();
-
-		$expiration_date = $post_expiration_manager->get_expiration_date_from_meta_value( $meta_value );
-
-		if ( null === $expiration_date ) {
-			return;
-		}
-
 		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
 
 		if ( null === $post_expiration_info ) {
+			return;
+		}
+
+		if ( null === $post_expiration_info->expiration_date ) {
 			return;
 		}
 

@@ -7,6 +7,9 @@
 
 namespace Pronamic\WordPressPostExpiration;
 
+use DateTimeImmutable;
+use DateTimeZone;
+
 /**
  * Post expiration info class
  */
@@ -40,13 +43,46 @@ final class PostExpirationInfo {
 	public $meta_key = '_pronamic_expiration_date';
 
 	/**
+	 * Date format.
+	 * 
+	 * @var string
+	 */
+	public $date_format = 'Y-m-d H:i:s';
+
+	/**
+	 * Timezone.
+	 * 
+	 * @var string
+	 */
+	public $timezone = 'GMT';
+
+	/**
+	 * Expiration date.
+	 * 
+	 * @var null|DateTimeImmutable
+	 */
+	public $expiration_date;
+
+	/**
 	 * Get post expiration info from post.
 	 * 
 	 * @param int $post Post ID.
 	 * @return self|null
 	 */
 	public static function get_from_post( $post ) {
-		return self::get_from_post_type( \get_post_type( $post ) );
+		$post_object = \get_post( $post );
+
+		$info = self::get_from_post_type( \get_post_type( $post_object ) );
+
+		if ( null === $info ) {
+			return null;
+		}
+
+		$meta_value = \get_post_meta( $post_object->ID, $info->meta_key, true );
+
+		$info->expiration_date = self::get_expiration_date_from_meta( $meta_value, $info );
+
+		return $info;
 	}
 
 	/**
@@ -81,5 +117,30 @@ final class PostExpirationInfo {
 		}
 
 		return $info;
+	}
+
+	/**
+	 * Get expiration date from meta value.
+	 * 
+	 * @param mixed $meta_value Meta value.
+	 * @param self  $info       Post expiration info.
+	 * @return DateTimeImmutable|null
+	 */
+	private static function get_expiration_date_from_meta_value( $meta_value, $info ) {
+		if ( ! \is_string( $meta_value ) ) {
+			return null;
+		}
+
+		try {
+			$result = DateTimeImmutable::createFromFormat( $info->date_format, $meta_value, new DateTimeZone( $info->timezone ) );
+
+			if ( false === $result ) {
+				return null;
+			}
+
+			return $result;
+		} catch ( \Exception $e ) {
+			return null;
+		}
 	}
 }
