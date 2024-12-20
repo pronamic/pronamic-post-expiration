@@ -92,7 +92,7 @@ final class PostExpirationInfo {
 	 * @return self|null
 	 */
 	public static function get_from_post_type( $post_type ) {
-		if ( ! \post_type_supports( $post_type, 'pronamic_expiration' ) ) {
+		if ( ! \post_type_supports( $post_type, 'pronamic-expiration' ) ) {
 			return null;
 		}
 
@@ -100,20 +100,20 @@ final class PostExpirationInfo {
 
 		$info = new self();
 
-		if ( isset( $supports['pronamic_expiration'][0]['source'] ) ) {
-			$info->source = $supports['pronamic_expiration'][0]['source'];
+		if ( isset( $supports['pronamic-expiration'][0]['source'] ) ) {
+			$info->source = $supports['pronamic-expiration'][0]['source'];
 		}
 
-		if ( isset( $supports['pronamic_expiration'][0]['post_status'] ) ) {
-			$info->post_status = $supports['pronamic_expiration'][0]['post_status'];
+		if ( isset( $supports['pronamic-expiration'][0]['post_status'] ) ) {
+			$info->post_status = $supports['pronamic-expiration'][0]['post_status'];
 		}
 
-		if ( isset( $supports['pronamic_expiration'][0]['show_ui'] ) ) {
-			$info->show_ui = $supports['pronamic_expiration'][0]['show_ui'];
+		if ( isset( $supports['pronamic-expiration'][0]['show_ui'] ) ) {
+			$info->show_ui = $supports['pronamic-expiration'][0]['show_ui'];
 		}
 
-		if ( isset( $supports['pronamic_expiration'][0]['meta_key'] ) ) {
-			$info->meta_key = $supports['pronamic_expiration'][0]['meta_key'];
+		if ( isset( $supports['pronamic-expiration'][0]['meta_key'] ) ) {
+			$info->meta_key = $supports['pronamic-expiration'][0]['meta_key'];
 		}
 
 		return $info;

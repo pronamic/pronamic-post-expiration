@@ -128,10 +128,10 @@ final class Plugin {
 		);
 
 		foreach ( $post_types_config as $post_type => $post_type_config ) {
-			if ( ! \post_type_supports( $post_type, 'pronamic_expiration' ) ) {
+			if ( ! \post_type_supports( $post_type, 'pronamic-expiration' ) ) {
 				\add_post_type_support(
 					$post_type,
-					'pronamic_expiration',
+					'pronamic-expiration',
 					[
 						'source'      => 'option',
 						'show_ui'     => true,
