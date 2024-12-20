@@ -76,6 +76,10 @@ final class PostExpirationInfo {
 			$info->show_ui = $supports['pronamic_expiration'][0]['show_ui'];
 		}
 
+		if ( isset( $supports['pronamic_expiration'][0]['meta_key'] ) ) {
+			$info->meta_key = $supports['pronamic_expiration'][0]['meta_key'];
+		}
+
 		return $info;
 	}
 }
