@@ -80,7 +80,7 @@ final class PostExpirationInfo {
 
 		$meta_value = \get_post_meta( $post_object->ID, $info->meta_key, true );
 
-		$info->expiration_date = self::get_expiration_date_from_meta( $meta_value, $info );
+		$info->expiration_date = self::get_expiration_date_from_meta_value( $meta_value, $info );
 
 		return $info;
 	}
