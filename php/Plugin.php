@@ -305,7 +305,7 @@ final class Plugin {
 		);
 
 		$action_id = \as_schedule_single_action(
-			$expiration_date->getTimestamp(),
+			$post_expiration_info->expiration_date->getTimestamp(),
 			'pronamic_expire_post',
 			[
 				'post_id' => $post_id,
