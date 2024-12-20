@@ -116,6 +116,10 @@ final class PostExpirationInfo {
 			$info->meta_key = $supports['pronamic-expiration'][0]['meta_key'];
 		}
 
+		if ( isset( $supports['pronamic-expiration'][0]['date_format'] ) ) {
+			$info->date_format = $supports['pronamic-expiration'][0]['date_format'];
+		}
+
 		return $info;
 	}
 
