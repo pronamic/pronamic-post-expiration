@@ -35,7 +35,7 @@ This plugin registers the post status `pronamic_expired`.
 			'editor',
 			'thumbnail',
 			// …
-			'pronamic_expiration',
+			'pronamic-expiration',
 		],
 		// …
 	]
@@ -54,7 +54,7 @@ This plugin registers the post status `pronamic_expired`.
 			'editor',
 			'thumbnail',
 			// …
-			'pronamic_expiration' => [
+			'pronamic-expiration' => [
 				'post_status' => 'pronamic_expired',
 				'show_ui'     => true,
 				'source'      => 'your-plugin-slug',
