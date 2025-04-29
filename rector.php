@@ -8,10 +8,8 @@ return RectorConfig::configure()
 	->withPaths(
 		[
 			__DIR__ . '/admin',
-			__DIR__ . '/node_modules',
 			__DIR__ . '/php',
 		]
 	)
-	// uncomment to reach your current PHP version
-	// ->withPhpSets()
+	->withPhpSets()
 	->withTypeCoverageLevel( 0 );
