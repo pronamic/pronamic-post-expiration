@@ -22,6 +22,7 @@
 		"wp-slug": "pronamic-post-expiration"
 	},
 	"require": {
+		"php": "^8.2",
 		"woocommerce/action-scheduler": "^3.8"
 	},
 	"require-dev": {
