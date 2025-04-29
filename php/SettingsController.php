@@ -76,14 +76,14 @@ final class SettingsController {
 		\add_settings_section(
 			'pronamic_post_expiration_general',
 			\__( 'General', 'pronamic-post-expiration' ),
-			function () { },
+			function (): void { },
 			'pronamic_post_expiration'
 		);
 
 		\add_settings_field(
 			'pronamic_post_expiration_config',
 			\__( 'Post types', 'pronamic-post-expiration' ),
-			function () {
+			function (): void {
 				include __DIR__ . '/../admin/settings-field-post-types-support.php';
 			},
 			'pronamic_post_expiration',
@@ -103,7 +103,7 @@ final class SettingsController {
 			\__( 'Pronamic Post Expiration', 'pronamic-post-expiration' ),
 			'manage_options',
 			'pronamic_post_expiration',
-			function () {
+			function (): void {
 				include __DIR__ . '/../admin/page-settings.php';
 			}
 		);
