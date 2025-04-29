@@ -30,7 +30,7 @@
 		"szepeviktor/phpstan-wordpress": "^1.3",
 		"phpstan/extension-installer": "^1.4",
 		"roots/wordpress-no-content": "^6.8",
-		"rector/rector": "*"
+		"rector/rector": "^1.2"
 	},
 	"scripts": {
 		"phpcbf": "XDEBUG_MODE=off vendor/bin/phpcbf",
