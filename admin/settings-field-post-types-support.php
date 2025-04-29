@@ -30,9 +30,7 @@ $post_status_objects = \get_post_stati(
 
 $post_status_objects = \array_filter(
 	$post_status_objects,
-	function ( $post_status_object ) {
-		return ! \in_array( $post_status_object->name, [ 'future', 'pending' ], true );
-	}
+	fn( $post_status_object ) => ! \in_array( $post_status_object->name, [ 'future', 'pending' ], true )
 );
 
 ?>
@@ -123,9 +121,7 @@ $post_status_objects = \array_filter(
 					// Filter groups without options.
 					$groups = array_filter(
 						$groups,
-						function ( $group ) {
-							return 0 !== count( $group['options'] );
-						}
+						fn( $group ) => 0 !== count( $group['options'] )
 					);
 
 					?>

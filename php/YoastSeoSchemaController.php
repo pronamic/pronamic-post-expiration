@@ -18,8 +18,8 @@ final class YoastSeoSchemaController {
 	 * @return void
 	 */
 	public function setup() {
-		\add_filter( 'wpseo_schema_article', [ $this, 'maybe_add_expires' ], 11, 1 );
-		\add_filter( 'wpseo_schema_webpage', [ $this, 'maybe_add_expires' ], 11, 1 );
+		\add_filter( 'wpseo_schema_article', $this->maybe_add_expires( ... ), 11, 1 );
+		\add_filter( 'wpseo_schema_webpage', $this->maybe_add_expires( ... ), 11, 1 );
 	}
 
 	/**
@@ -30,7 +30,7 @@ final class YoastSeoSchemaController {
 	 * @param array<string, string> $data Schema.org Webpage data array.
 	 * @return array<string, string> Schema.org Webpage data array.
 	 */
-	public function maybe_add_expires( $data ) {
+	private function maybe_add_expires( $data ) {
 		if ( ! \is_singular() ) {
 			return $data;
 		}

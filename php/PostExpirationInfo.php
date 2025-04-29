@@ -130,7 +130,7 @@ final class PostExpirationInfo {
 	 * @param self  $info       Post expiration info.
 	 * @return DateTimeImmutable|null
 	 */
-	private static function get_expiration_date_from_meta_value( $meta_value, $info ) {
+	private static function get_expiration_date_from_meta_value( mixed $meta_value, $info ) {
 		if ( ! \is_string( $meta_value ) ) {
 			return null;
 		}
@@ -143,7 +143,7 @@ final class PostExpirationInfo {
 			}
 
 			return $result;
-		} catch ( \Exception $e ) {
+		} catch ( \Exception ) {
 			return null;
 		}
 	}

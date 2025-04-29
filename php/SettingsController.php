@@ -20,11 +20,11 @@ final class SettingsController {
 	 * @return void
 	 */
 	public function setup() {
-		\add_action( 'init', [ $this, 'init' ] );
+		\add_action( 'init', $this->init( ... ) );
 
-		\add_action( 'admin_init', [ $this, 'admin_init' ] );
+		\add_action( 'admin_init', $this->admin_init( ... ) );
 
-		\add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+		\add_action( 'admin_menu', $this->admin_menu( ... ) );
 	}
 
 	/**
@@ -32,7 +32,7 @@ final class SettingsController {
 	 * 
 	 * @return void
 	 */
-	public function init() {
+	private function init() {
 		\register_setting(
 			'pronamic_post_expiration',
 			'pronamic_post_expiration_config',
@@ -72,7 +72,7 @@ final class SettingsController {
 	 * 
 	 * @return void
 	 */
-	public function admin_init() {
+	private function admin_init() {
 		\add_settings_section(
 			'pronamic_post_expiration_general',
 			\__( 'General', 'pronamic-post-expiration' ),
@@ -97,7 +97,7 @@ final class SettingsController {
 	 * @link https://developer.wordpress.org/reference/functions/add_options_page/
 	 * @return void
 	 */
-	public function admin_menu() {
+	private function admin_menu() {
 		\add_options_page(
 			\__( 'Pronamic Post Expiration', 'pronamic-post-expiration' ),
 			\__( 'Pronamic Post Expiration', 'pronamic-post-expiration' ),

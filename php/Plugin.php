@@ -60,18 +60,18 @@ final class Plugin {
 	 * @return void
 	 */
 	public function setup() {
-		\add_action( 'init', [ $this, 'register_post_status' ], 9000 );
-		\add_action( 'init', [ $this, 'add_post_type_support_by_option' ], 9000 );
+		\add_action( 'init', $this->register_post_status( ... ), 9000 );
+		\add_action( 'init', $this->add_post_type_support_by_option( ... ), 9000 );
 		\add_action( 'init', $this->rest_prepare_post_types( ... ), 9001 );
 
-		\add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
+		\add_action( 'add_meta_boxes', $this->add_meta_boxes( ... ) );
 
-		\add_action( 'save_post', [ $this, 'save_post' ] );
+		\add_action( 'save_post', $this->save_post( ... ) );
 
-		\add_action( 'updated_post_meta', [ $this, 'schedule_expiration_event' ], 10, 3 );
-		\add_action( 'deleted_post_meta', [ $this, 'unschedule_expiration_event' ], 10, 3 );
+		\add_action( 'updated_post_meta', $this->schedule_expiration_event( ... ), 10, 3 );
+		\add_action( 'deleted_post_meta', $this->unschedule_expiration_event( ... ), 10, 3 );
 
-		\add_action( 'pronamic_expire_post', [ $this, 'expire_post' ] );
+		\add_action( 'pronamic_expire_post', $this->expire_post( ... ) );
 
 		foreach ( $this->controllers as $controller ) {
 			$controller->setup();
@@ -83,7 +83,7 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	public function register_post_status() {
+	private function register_post_status() {
 		$post_status_info = \get_post_status_object( 'pronamic_expired' );
 
 		if ( null !== $post_status_info ) {
@@ -109,7 +109,7 @@ final class Plugin {
 	 *
 	 * @return void
 	 */
-	public function add_post_type_support_by_option() {
+	private function add_post_type_support_by_option() {
 		$config = \get_option( 'pronamic_post_expiration_config' );
 
 		if ( ! isset( $config['post_types'] ) ) {
@@ -124,9 +124,7 @@ final class Plugin {
 
 		$post_types_config = \array_filter(
 			$post_types_config,
-			function ( $post_type_config ) {
-				return $post_type_config['support'] ?? false;
-			}
+			fn( $post_type_config ) => $post_type_config['support'] ?? false
 		);
 
 		foreach ( $post_types_config as $post_type => $post_type_config ) {
@@ -151,7 +149,7 @@ final class Plugin {
 	 * @param string $post_type Post type.
 	 * @return void
 	 */
-	public function add_meta_boxes( $post_type ) {
+	private function add_meta_boxes( $post_type ) {
 		$post_expiration_info = PostExpirationInfo::get_from_post_type( $post_type );
 
 		if ( null === $post_expiration_info ) {
@@ -165,7 +163,7 @@ final class Plugin {
 		\add_meta_box(
 			'pronamic_post_expiration_date',
 			\__( 'Expiration', 'pronamic-post-expiration' ),
-			[ $this, 'meta_box_expiration' ],
+			$this->meta_box_expiration( ... ),
 			$post_type,
 			'side',
 			'high'
@@ -178,7 +176,7 @@ final class Plugin {
 	 * @param int $post_id Post ID.
 	 * @return void
 	 */
-	public function save_post( $post_id ) {
+	private function save_post( $post_id ) {
 		if ( ! \array_key_exists( 'pronamic_expiration_date_nonce', $_POST ) ) {
 			return;
 		}
@@ -213,7 +211,7 @@ final class Plugin {
 			$date_gmt = $result->setTimezone( new DateTimeZone( 'GMT' ) );
 
 			\update_post_meta( $post_id, '_pronamic_expiration_date', $date_gmt->format( 'Y-m-d H:i:s' ) );
-		} catch ( \Exception $e ) {
+		} catch ( \Exception ) {
 			return;
 		}
 
@@ -234,7 +232,7 @@ final class Plugin {
 	 * @param string $meta_key  Metadata key.
 	 * @return void
 	 */
-	public function schedule_expiration_event( $meta_id, $object_id, $meta_key ) {
+	private function schedule_expiration_event( $meta_id, $object_id, $meta_key ) {
 		$post_expiration_info = PostExpirationInfo::get_from_post( $object_id );
 
 		if ( null === $post_expiration_info ) {
@@ -257,7 +255,7 @@ final class Plugin {
 	 * @param string $meta_key    Metadata key.
 	 * @return void
 	 */
-	public function unschedule_expiration_event( $meta_id, $object_id, $meta_key ) {
+	private function unschedule_expiration_event( $meta_id, $object_id, $meta_key ) {
 		$post_expiration_info = PostExpirationInfo::get_from_post( $object_id );
 
 		if ( null === $post_expiration_info ) {
@@ -325,7 +323,7 @@ final class Plugin {
 	 * @param WP_Post $post Post.
 	 * @return void
 	 */
-	public function meta_box_expiration( $post ) {
+	private function meta_box_expiration( $post ) {
 		$value = '';
 
 		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
@@ -368,7 +366,7 @@ final class Plugin {
 	 * @return void
 	 * @throws \Exception Throws an exception if the post status could not be updated to expired.
 	 */
-	public function expire_post( $post_id ) {
+	private function expire_post( $post_id ) {
 		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
 
 		if ( null === $post_expiration_info ) {
@@ -406,9 +404,7 @@ final class Plugin {
 
 		$post_types = \array_filter(
 			$post_types,
-			function ( $post_type ) {
-				return \post_type_supports( $post_type, 'pronamic-expiration' );
-			}
+			fn( $post_type ) => \post_type_supports( $post_type, 'pronamic-expiration' )
 		);
 
 		foreach ( $post_types as $post_type ) {
