@@ -68,6 +68,7 @@ final class Plugin {
 
 		\add_action( 'save_post', $this->save_post( ... ) );
 
+		\add_action( 'added_post_meta', $this->schedule_expiration_event( ... ), 10, 3 );
 		\add_action( 'updated_post_meta', $this->schedule_expiration_event( ... ), 10, 3 );
 		\add_action( 'deleted_post_meta', $this->unschedule_expiration_event( ... ), 10, 3 );
 
