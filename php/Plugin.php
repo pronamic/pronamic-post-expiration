@@ -62,7 +62,6 @@ final class Plugin {
 	public function setup() {
 		\add_action( 'init', $this->register_post_status( ... ), 9000 );
 		\add_action( 'init', $this->add_post_type_support_by_option( ... ), 9000 );
-		\add_action( 'init', $this->rest_prepare_post_types( ... ), 9001 );
 
 		\add_action( 'add_meta_boxes', $this->add_meta_boxes( ... ) );
 
@@ -392,50 +391,5 @@ final class Plugin {
 		if ( $result instanceof WP_Error ) {
 			throw new \Exception( \esc_html( $result->get_error_message() ) );
 		}
-	}
-
-	/**
-	 * REST prepare post types.
-	 *
-	 * @return void
-	 */
-	private function rest_prepare_post_types() {
-		$post_types = \get_post_types();
-
-		$post_types = \array_filter(
-			$post_types,
-			fn( $post_type ) => \post_type_supports( $post_type, 'pronamic-expiration' )
-		);
-
-		foreach ( $post_types as $post_type ) {
-			\add_filter( 'rest_prepare_' . $post_type, $this->rest_prepare_post_status( ... ), 10, 3 );
-		}
-	}
-
-	/**
-	 * REST prepare post status.
-	 * 
-	 * @link https://developer.wordpress.org/reference/hooks/rest_prepare_this-post_type/
-	 * @param WP_REST_Response $response Response.
-	 * @return WP_REST_Response Response.
-	 */
-	private function rest_prepare_post_status( WP_REST_Response $response ) {
-		$data = $response->get_data();
-
-		if ( ! \array_key_exists( 'status', $data ) ) {
-			return $response;
-		}
-
-		$status = $data['status'];
-
-		if ( 'pronamic_expired' !== $status ) {
-			return $response;
-		}
-
-		$data['status'] = 'publish';
-
-		$response->set_data( $data );
-
-		return $response;
 	}
 }
