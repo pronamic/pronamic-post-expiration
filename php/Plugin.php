@@ -310,8 +310,7 @@ final class Plugin {
 			[
 				'post_id' => $post_id,
 			],
-			'pronamic-post-expiration',
-			true
+			'pronamic-post-expiration'
 		);
 
 		\update_post_meta( $post_id, '_pronamic_expire_action_id', $action_id );
