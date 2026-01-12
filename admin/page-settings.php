@@ -2,7 +2,10 @@
 /**
  * Admin page settings
  *
- * @package Pronamic\WordPressCloudflare
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2026 Pronamic
+ * @license   GPL-2.0-or-later
+ * @package   Pronamic\WordPressPostExpiration
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

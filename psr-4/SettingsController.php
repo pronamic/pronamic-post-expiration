@@ -3,7 +3,7 @@
  * Settings controller
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2024 Pronamic
+ * @copyright 2005-2026 Pronamic
  * @license   GPL-2.0-or-later
  * @package   Pronamic\WordPressPostExpiration
  */
@@ -16,7 +16,7 @@ namespace Pronamic\WordPressPostExpiration;
 final class SettingsController {
 	/**
 	 * Setup.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function setup() {
@@ -29,7 +29,7 @@ final class SettingsController {
 
 	/**
 	 * Initialize.
-	 * 
+	 *
 	 * @return void
 	 */
 	private function init() {
@@ -38,7 +38,7 @@ final class SettingsController {
 			'pronamic_post_expiration_config',
 			/**
 			 * Schema.
-			 * 
+			 *
 			 * @link https://developer.wordpress.org/reference/functions/register_setting/
 			 * @link https://developer.wordpress.org/rest-api/extending-the-rest-api/schema/
 			 */
@@ -69,7 +69,7 @@ final class SettingsController {
 
 	/**
 	 * Admin initialize.
-	 * 
+	 *
 	 * @return void
 	 */
 	private function admin_init() {
@@ -93,7 +93,7 @@ final class SettingsController {
 
 	/**
 	 * Admin menu.
-	 * 
+	 *
 	 * @link https://developer.wordpress.org/reference/functions/add_options_page/
 	 * @return void
 	 */

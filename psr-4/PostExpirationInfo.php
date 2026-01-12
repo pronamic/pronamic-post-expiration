@@ -2,7 +2,10 @@
 /**
  * Post expiration info
  *
- * @package Pronamic\WordPressPostExpiration
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2026 Pronamic
+ * @license   GPL-2.0-or-later
+ * @package   Pronamic\WordPressPostExpiration
  */
 
 namespace Pronamic\WordPressPostExpiration;
@@ -16,56 +19,56 @@ use DateTimeZone;
 final class PostExpirationInfo {
 	/**
 	 * Source.
-	 * 
+	 *
 	 * @var string
 	 */
 	public $source = '';
 
 	/**
 	 * Show UI.
-	 * 
+	 *
 	 * @var bool
 	 */
 	public $show_ui = false;
 
 	/**
 	 * Post status.
-	 * 
+	 *
 	 * @var string
 	 */
 	public $post_status = 'pronamic_expired';
 
 	/**
 	 * Meta key.
-	 * 
+	 *
 	 * @var string
 	 */
 	public $meta_key = '_pronamic_expiration_date';
 
 	/**
 	 * Date format.
-	 * 
+	 *
 	 * @var string
 	 */
 	public $date_format = 'Y-m-d H:i:s';
 
 	/**
 	 * Timezone.
-	 * 
+	 *
 	 * @var string
 	 */
 	public $timezone = 'GMT';
 
 	/**
 	 * Expiration date.
-	 * 
+	 *
 	 * @var null|DateTimeImmutable
 	 */
 	public $expiration_date;
 
 	/**
 	 * Get post expiration info from post.
-	 * 
+	 *
 	 * @param int $post Post ID.
 	 * @return self|null
 	 */
@@ -87,7 +90,7 @@ final class PostExpirationInfo {
 
 	/**
 	 * Get post expiration info from post type.
-	 * 
+	 *
 	 * @param string $post_type Post type.
 	 * @return self|null
 	 */
@@ -125,7 +128,7 @@ final class PostExpirationInfo {
 
 	/**
 	 * Get expiration date from meta value.
-	 * 
+	 *
 	 * @param mixed $meta_value Meta value.
 	 * @param self  $info       Post expiration info.
 	 * @return DateTimeImmutable|null

@@ -3,9 +3,9 @@
  * Settings field post types
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2024 Pronamic
+ * @copyright 2005-2026 Pronamic
  * @license   GPL-2.0-or-later
- * @package   Pronamic\WordPressCloudflare
+ * @package   Pronamic\WordPressPostExpiration
  */
 
 namespace Pronamic\WordPressPostExpiration;

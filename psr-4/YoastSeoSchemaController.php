@@ -2,7 +2,10 @@
 /**
  * Yoast SEO schema controller
  *
- * @package Pronamic\WordPressPostExpiration
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2026 Pronamic
+ * @license   GPL-2.0-or-later
+ * @package   Pronamic\WordPressPostExpiration
  */
 
 namespace Pronamic\WordPressPostExpiration;
@@ -26,7 +29,7 @@ final class YoastSeoSchemaController {
 	 * Maybe add expires.
 	 *
 	 * @link https://developer.yoast.com/features/schema/pieces/webpage/
-	 * 
+	 *
 	 * @param array<string, string> $data Schema.org Webpage data array.
 	 * @return array<string, string> Schema.org Webpage data array.
 	 */

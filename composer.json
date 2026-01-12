@@ -5,7 +5,7 @@
 	"license": "proprietary",
 	"autoload": {
 		"psr-4": {
-			"Pronamic\\WordPressPostExpiration\\": "php/"
+			"Pronamic\\WordPressPostExpiration\\": "psr-4/"
 		}
 	},
 	"authors": [
@@ -17,21 +17,25 @@
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"phpstan/extension-installer": true
+			"phpstan/extension-installer": true,
+			"automattic/jetpack-autoloader": true
 		},
 		"wp-slug": "pronamic-post-expiration"
 	},
 	"require": {
 		"php": "^8.2",
-		"woocommerce/action-scheduler": "^3.8"
+		"woocommerce/action-scheduler": "^3.9",
+		"automattic/jetpack-autoloader": "^5.0"
 	},
 	"require-dev": {
-		"pronamic/wp-coding-standards": "^2.2",
+		"pronamic/wp-coding-standards": "^2.3",
 		"pronamic/pronamic-cli": "^1.1",
 		"szepeviktor/phpstan-wordpress": "^1.3",
 		"phpstan/extension-installer": "^1.4",
-		"roots/wordpress-no-content": "^6.8",
-		"rector/rector": "^1.2"
+		"roots/wordpress-no-content": "^6.9",
+		"rector/rector": "^1.2",
+		"wp-cli/dist-archive-command": "*",
+		"wp-cli/wp-cli-bundle": "*"
 	},
 	"scripts": {
 		"phpcbf": "XDEBUG_MODE=off vendor/bin/phpcbf",

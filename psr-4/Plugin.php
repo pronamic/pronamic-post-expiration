@@ -2,7 +2,10 @@
 /**
  * Plugin
  *
- * @package Pronamic\WordPressPostExpiration
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2026 Pronamic
+ * @license   GPL-2.0-or-later
+ * @package   Pronamic\WordPressPostExpiration
  */
 
 namespace Pronamic\WordPressPostExpiration;
@@ -11,7 +14,6 @@ use DateTimeImmutable;
 use DateTimezone;
 use WP_Error;
 use WP_Post;
-use WP_REST_Response;
 
 /**
  * Plugin class
@@ -52,14 +54,7 @@ final class Plugin {
 			new SettingsController(),
 			new YoastSeoSchemaController(),
 		];
-	}
 
-	/**
-	 * Setup.
-	 *
-	 * @return void
-	 */
-	public function setup() {
 		\add_action( 'init', $this->register_post_status( ... ), 9000 );
 		\add_action( 'init', $this->add_post_type_support_by_option( ... ), 9000 );
 
