@@ -1,6 +1,6 @@
 {
 	"name": "@pronamic/pronamic-post-expiration",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Easily manage and automate post expiration in WordPress.",
 	"author": "Pronamic",
 	"license": "GPL-2.0-or-later",
