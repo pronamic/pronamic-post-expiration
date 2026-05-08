@@ -61,6 +61,7 @@ final class Plugin {
 		\add_action( 'add_meta_boxes', $this->add_meta_boxes( ... ) );
 
 		\add_action( 'save_post', $this->save_post( ... ) );
+		\add_action( 'save_post', $this->maybe_schedule_expiration_event_on_save( ... ), 1000 );
 
 		\add_action( 'added_post_meta', $this->schedule_expiration_event( ... ), 10, 3 );
 		\add_action( 'updated_post_meta', $this->schedule_expiration_event( ... ), 10, 3 );
@@ -210,12 +211,6 @@ final class Plugin {
 			return;
 		}
 
-		/**
-		 * The `update_post_meta( … )` function call above should already trigger this,
-		 * but only if the meta value has actually changed. This is an additional call
-		 * to force the event to be scheduled for sure.
-		 */
-		$this->maybe_schedule_expiration_event( $post_id );
 	}
 
 	/**
@@ -271,6 +266,16 @@ final class Plugin {
 	}
 
 	/**
+	 * Maybe schedule expiration event on save.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return void
+	 */
+	private function maybe_schedule_expiration_event_on_save( $post_id ) {
+		$this->maybe_schedule_expiration_event( $post_id );
+	}
+
+	/**
 	 * Maybe schedule expiration event.
 	 *
 	 * @param int $post_id Post ID.
@@ -320,7 +325,7 @@ final class Plugin {
 	private function meta_box_expiration( $post ) {
 		$value = '';
 
-		$post_expiration_info = PostExpirationInfo::get_from_post( $post_id );
+		$post_expiration_info = PostExpirationInfo::get_from_post( $post );
 
 		if ( null !== $post_expiration_info && null !== $post_expiration_info->expiration_date ) {
 			$date_local = $post_expiration_info->expiration_date->setTimezone( \wp_timezone() );
